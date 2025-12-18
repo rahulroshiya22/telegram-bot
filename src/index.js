@@ -1,5 +1,18 @@
 require('dotenv').config();
 const { Telegraf } = require('telegraf');
+const http = require('http'); // Added for Render Port Binding
+
+// --- Render/Heroku Keep-Alive (Fake Port) ---
+const port = process.env.PORT || 3000;
+http.createServer((req, res) => {
+    res.writeHead(200, { 'Content-Type': 'text/plain' });
+    res.write('Telegram Bot is Running!');
+    res.end();
+}).listen(port, () => {
+    console.log(`Dummy server listening on port ${port}`);
+});
+// ------------------------------------------
+
 const OpenRouterService = require('./services/openRouter');
 const GoogleAIService = require('./services/google');
 const sessionManager = require('./utils/session');
